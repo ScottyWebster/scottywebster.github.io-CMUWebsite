@@ -82,7 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Page fade transitions
   document.querySelectorAll("a[href]").forEach((link) => {
     const href = link.getAttribute("href");
     if (href && !href.startsWith("#") && !href.startsWith("http")) {
