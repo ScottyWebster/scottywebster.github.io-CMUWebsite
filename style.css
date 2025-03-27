@@ -6,19 +6,35 @@ body {
   
   nav {
     background-color: #333;
-    padding: 10px;
+    padding: 10px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* ensures it stays on top of other content */
+  }
+
+  nav ul {
+    background-color: #222;
+    padding: 10px 0;
+    border-bottom: 2px solid #4CAF50;
+    display: flex;
+    justify-content: center;
   }
   
-  nav ul {
-    list-style: none;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
+
+  nav li{
+    margin: 0 15px;
   }
   
   nav a {
     color: white;
     text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+  }
+  
+  nav a:hover {
+    background-color: #4CAF50;
+    color: white;
   }
   
   section {
@@ -27,11 +43,12 @@ body {
   }
   
   .project-card {
-    border: 1px solid #ccc;
-    padding: 20px;
-    margin: 10px auto;
-    width: 300px;
-  }
+    margin: 20px auto;
+    max-width: 400px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }  
   
   .modal {
     position: fixed;
@@ -66,9 +83,17 @@ body {
   }
   
   .carousel {
-    position: relative;
     margin-top: 20px;
+    text-align: center;
   }
+  
+  .carousel-controls {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
   
   .carousel img {
     width: 100%;
@@ -104,5 +129,48 @@ body {
   
   .dot.active {
     background-color: #333;
+  }
+  
+  button {
+    padding: 10px 20px;
+    background-color: #4CAF50; /* nice green */
+    color: white;
+    border: none;
+    border-radius: 8px; /* this makes the corners round */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #45a049;
+  }
+
+  body.dark-mode {
+    background-color: #121212;
+    color: #f0f0f0;
+  }
+  
+  body.dark-mode nav {
+    background-color: #1e1e1e;
+  }
+  
+  body.dark-mode .project-card,
+  body.dark-mode .modal-content {
+    background-color: #222;
+    color: #f0f0f0;
+  }
+  
+  body.dark-mode .dot.active {
+    background-color: #f0f0f0;
+  }
+
+  body {
+    opacity: 1;
+    transition: opacity 0.4s ease;
+  }
+  
+  body.fade-out {
+    opacity: 0;
   }
   
