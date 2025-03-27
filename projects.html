@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Projects - My Portfolio</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="skills.html">Skills</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <section>
+      <h2>Projects</h2>
+      <div class="project-card">
+        <h3>Project One</h3>
+        <button onclick="openModal()">View Details</button>
+        <a href="https://example.com"><button>Visit Project</button></a>
+      </div>
+    </section>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hidden">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3>Project One Details</h3>
+        <p>This is a brief description of the project...</p>
+        <div class="carousel">
+          <button onclick="prevSlide()">&#10094;</button>
+          <img id="carousel-img" src="images/img1.jpg" alt="Project Image" />
+          <button onclick="nextSlide()">&#10095;</button>
+          <div class="indicators">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
