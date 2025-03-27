@@ -1,6 +1,6 @@
 const modal = document.getElementById("modal");
 let currentSlide = 0;
-const images = ["img1.jpg", "img2.jpg", "img3.jpg"]; // Replace with real paths
+const images = ["images/img1.jpg", "images/img2.png", "images/img3.jpg"]; // Replace with real paths
 
 function openModal() {
   modal.classList.remove("hidden");
