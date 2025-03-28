@@ -23,13 +23,81 @@
 
     <section>
       <h2>Skills</h2>
-      <p>HTML</p>
-      <p>CSS</p>
-      <p>JavaScript</p>
-      <p>Java</p>
-      <p>Python</p>
-      <p>C#</p>
+      <div class="tabs">
+        <button class="tab-button active" data-tab="languages">
+          Programming Languages
+        </button>
+        <button class="tab-button" data-tab="frameworks">Frameworks</button>
+        <button class="tab-button" data-tab="tools">Tools</button>
+      </div>
+      <div class="tab-content" id="languages">
+        <div class="skill">
+          <span>HTML</span>
+          <div class="progress">
+            <div class="bar" style="--level: 80%">80%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>CSS</span>
+          <div class="progress">
+            <div class="bar" style="--level: 85%">85%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>JavaScript</span>
+          <div class="progress">
+            <div class="bar" style="--level: 75%">75%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>Python</span>
+          <div class="progress">
+            <div class="bar" style="--level: 80%">80%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>Java</span>
+          <div class="progress">
+            <div class="bar" style="--level: 70%">70%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>C#</span>
+          <div class="progress">
+            <div class="bar" style="--level: 70%">70%</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content hidden" id="frameworks">
+        <div class="skill">
+          <span>React</span>
+          <div class="progress">
+            <div class="bar" style="--level: 15%">15%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>Node.js</span>
+          <div class="progress">
+            <div class="bar" style="--level: 70%">70%</div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-content hidden" id="tools">
+        <div class="skill">
+          <span>Git</span>
+          <div class="progress">
+            <div class="bar" style="--level: 80%">80%</div>
+          </div>
+        </div>
+        <div class="skill">
+          <span>VS Code</span>
+          <div class="progress">
+            <div class="bar" style="--level: 99%">99%</div>
+          </div>
+        </div>
+      </div>
     </section>
+
+    <script defer src="script.js"></script>
   </body>
-  <script defer src="script.js"></script>
 </html>

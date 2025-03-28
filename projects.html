@@ -50,22 +50,64 @@
       </div>
     </section>
 
+    <section>
+      <h2>Project Timeline</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3>Interactive Warhammer Fantasy Map</h3>
+            <span class="duration">Jan 2023 - Mar 2023</span>
+            <p>A fantasy mapping tool inspired by Total War: Warhammer 3.</p>
+            <button
+              class="view-details-btn"
+              data-title="Interactive Warhammer Fantasy Map"
+              data-description="Based off of the game Total War: Warhammer 3"
+              data-images='["images/img1.jpg", "images/img2.png", "images/img3.jpg"]'
+            >
+              View Details
+            </button>
+            <a href="https://scottywebster.github.io/"
+              ><button>Visit Project</button></a
+            >
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content">
+            <h3>Blank</h3>
+            <span class="duration">May 2023 - Jun 2023</span>
+            <p>Placeholder for future project.</p>
+            <button
+              class="view-details-btn"
+              data-title="Blank"
+              data-description="Blank"
+              data-images='["images/img4.jpg", "images/img5.jpg"]'
+            >
+              View Details
+            </button>
+            <a href="example.com"><button>Visit Project</button></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <div id="modal" class="modal hidden">
-        <div class="modal-content">
-          <span class="close" onclick="closeModal()">&times;</span>
-          <h3 id="modal-title">Project Title</h3>
-          <p id="modal-description">Project description here</p>
-          <div class="carousel">
-            <img id="carousel-img" src="" alt="Project Image" />
-            <div class="carousel-controls">
-              <button onclick="prevSlide()">&#10094;</button>
-              <button onclick="nextSlide()">&#10095;</button>
-            </div>
-            <div class="indicators" id="carousel-indicators"></div>
-          </div>          
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modal-title">Project Title</h3>
+        <p id="modal-description">Project description here</p>
+        <div class="carousel">
+          <img id="carousel-img" src="" alt="Project Image" />
+          <div class="carousel-controls">
+            <button onclick="prevSlide()">&#10094;</button>
+            <button onclick="nextSlide()">&#10095;</button>
+          </div>
+          <div class="indicators" id="carousel-indicators"></div>
         </div>
       </div>
     </div>
+
+    <script defer src="script.js"></script>
   </body>
-  <script defer src="script.js"></script>
 </html>
