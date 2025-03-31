@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 19,
       category: "Clothing",
     },
-    {
+    { 
       name: "Headphones",
       image: "images/img5.jpg",
       price: 199,
@@ -272,11 +272,19 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  searchInput.addEventListener("input", renderProducts);
-  sortSelect.addEventListener("change", renderProducts);
-  categoryCheckboxes.forEach((cb) =>
-    cb.addEventListener("change", renderProducts)
-  );
+  if (searchInput) {
+    searchInput.addEventListener("input", renderProducts);
+  }
+  
+  if (sortSelect) {
+    sortSelect.addEventListener("change", renderProducts);
+  }
+  
+  if (categoryCheckboxes.length > 0) {
+    categoryCheckboxes.forEach((cb) =>
+      cb.addEventListener("change", renderProducts)
+    );
+  }
 
   renderProducts();
 });
