@@ -357,6 +357,67 @@ form {
   align-items: center;
 }
 
+.product-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.product-card {
+  width: 200px;
+  background-color: #f1f1f1;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  padding: 10px;
+}
+
+.product-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.highlight {
+  background-color: yellow;
+}
+
+input[type="text"],
+select {
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Dark mode styles */
+body.dark-mode .product-card {
+  background-color: #222;
+  color: #f0f0f0;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode select {
+  background-color: #333;
+  color: #f0f0f0;
+  border: 1px solid #555;
+}
+
+body.dark-mode .highlight {
+  background-color: #ff0;
+  color: black;
+}
+
 @keyframes fadein {
   from {
     opacity: 0;

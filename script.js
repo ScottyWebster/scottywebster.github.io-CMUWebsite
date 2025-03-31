@@ -163,4 +163,120 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+
+  //Shop stuff
+
+  const products = [
+    {
+      name: "Smartphone",
+      image: "images/img1.jpg",
+      price: 699,
+      category: "Electronics",
+    },
+    {
+      name: "Laptop",
+      image: "images/img2.png",
+      price: 999,
+      category: "Electronics",
+    },
+    {
+      name: "Jeans",
+      image: "images/img3.jpg",
+      price: 49,
+      category: "Clothing",
+    },
+    {
+      name: "T-shirt",
+      image: "images/img4.jpg",
+      price: 19,
+      category: "Clothing",
+    },
+    {
+      name: "Headphones",
+      image: "images/img5.jpg",
+      price: 199,
+      category: "Electronics",
+    },
+    {
+      name: "Blender",
+      image: "images/img6.jpg",
+      price: 59,
+      category: "Home",
+    },
+    {
+      name: "Sofa",
+      image: "images/img7.jpg",
+      price: 399,
+      category: "Home",
+    },
+    {
+      name: "Jacket",
+      image: "images/img8.jpg",
+      price: 89,
+      category: "Clothing",
+    },
+    {
+      name: "Microwave",
+      image: "images/img9.jpg",
+      price: 120,
+      category: "Home",
+    },
+  ];
+
+  const gallery = document.getElementById("productGallery");
+  const searchInput = document.getElementById("searchInput");
+  const sortSelect = document.getElementById("sortSelect");
+  const categoryCheckboxes = document.querySelectorAll(".category-filter");
+
+  function renderProducts() {
+    const search = searchInput.value.toLowerCase();
+    const sortValue = sortSelect.value;
+    const selectedCategories = Array.from(categoryCheckboxes)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+
+    let filtered = products.filter(
+      (p) =>
+        p.name.toLowerCase().includes(search) &&
+        selectedCategories.includes(p.category)
+    );
+
+    // Sort logic
+    if (sortValue === "price-asc")
+      filtered.sort((a, b) => a.price - b.price);
+    if (sortValue === "price-desc")
+      filtered.sort((a, b) => b.price - a.price);
+    if (sortValue === "name-asc")
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    if (sortValue === "name-desc")
+      filtered.sort((a, b) => b.name.localeCompare(a.name));
+
+    gallery.innerHTML = "";
+
+    filtered.forEach((p) => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      const regex = new RegExp(`(${search})`, "gi");
+      const highlightedName = p.name.replace(
+        regex,
+        '<span class="highlight">$1</span>'
+      );
+
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.name}" />
+        <h3>${highlightedName}</h3>
+        <p>Price: $${p.price}</p>
+        <p>Category: ${p.category}</p>
+      `;
+      gallery.appendChild(card);
+    });
+  }
+
+  searchInput.addEventListener("input", renderProducts);
+  sortSelect.addEventListener("change", renderProducts);
+  categoryCheckboxes.forEach((cb) =>
+    cb.addEventListener("change", renderProducts)
+  );
+
+  renderProducts();
 });
