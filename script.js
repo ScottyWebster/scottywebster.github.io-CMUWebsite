@@ -169,19 +169,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const products = [
     {
       name: "Smartphone",
-      image: "images/img1.jpg",
+      image: "images/smartphone.jpg",
       price: 699,
       category: "Electronics",
     },
     {
       name: "Laptop",
-      image: "images/img2.png",
+      image: "images/laptop.jpg",
       price: 999,
       category: "Electronics",
     },
     {
       name: "Jeans",
-      image: "images/img3.jpg",
+      image: "images/jeans.jpg",
       price: 49,
       category: "Clothing",
     },
