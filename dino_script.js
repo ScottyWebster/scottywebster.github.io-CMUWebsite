@@ -1,4 +1,4 @@
-// Dino Game with Extension Features — Time-Based Version
+// Dino Game with Extension Features — Fully Time-Based Version
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -8,10 +8,10 @@ let dino = {
   width: 40,
   height: 40,
   velocityY: 0,
-  gravity: 0.9,
+  gravity: 1000, // gravity in px/s^2
   isJumping: false,
   isInvincible: false,
-  jumpTimer: 0,
+  jumpDuration: 0,
 };
 
 let score = 0;
@@ -21,13 +21,14 @@ let gameSpeed = 5;
 let isGameOver = false;
 let nightMode = false;
 let jumpPressed = false;
-let canJump = true;
+let jumpStarted = false;
 
 let lastTime = performance.now();
 let obstacleTimer = 0;
 let powerUpTimer = 0;
 
-const MAX_JUMP_TIME = 5;
+const MAX_JUMP_TIME = 0.3; // seconds
+const JUMP_VELOCITY = -400; // px/s
 
 const dinoImage = new Image();
 dinoImage.src =
@@ -99,19 +100,31 @@ function update(deltaTime) {
   score += Math.floor(deltaTime * 60);
   gameSpeed = 5 + score / 200;
 
-  if (jumpPressed && dino.isJumping && dino.jumpTimer < MAX_JUMP_TIME) {
-    dino.velocityY = -10;
-    dino.jumpTimer += deltaTime * 60;
+  if (jumpPressed && !dino.isJumping && dino.y >= 260) {
+    dino.isJumping = true;
+    dino.jumpDuration = 0;
+    dino.velocityY = JUMP_VELOCITY;
   }
 
-  dino.velocityY += dino.gravity * deltaTime * 60;
-  dino.y += dino.velocityY;
+  if (dino.isJumping && jumpPressed && dino.jumpDuration < MAX_JUMP_TIME) {
+    dino.velocityY = JUMP_VELOCITY;
+    dino.jumpDuration += deltaTime;
+  }
+
+  dino.velocityY += dino.gravity * deltaTime;
+  dino.y += dino.velocityY * deltaTime;
+
+  if (dino.y < 260) {
+    document.getElementById("jumpingNotice").classList.remove("hidden");
+  } else {
+    document.getElementById("jumpingNotice").classList.add("hidden");
+  }
 
   if (dino.y >= 260) {
     dino.y = 260;
+    dino.velocityY = 0;
     dino.isJumping = false;
-    dino.jumpTimer = 0;
-    canJump = true;
+    dino.jumpDuration = 0;
   }
 
   obstacleTimer += deltaTime;
@@ -223,15 +236,15 @@ function restartGame() {
   dino.y = 260;
   dino.velocityY = 0;
   dino.isJumping = false;
-  dino.jumpTimer = 0;
+  dino.jumpDuration = 0;
   dino.isInvincible = false;
-  canJump = true;
   isGameOver = false;
   obstacles = [];
   powerUps = [];
   obstacleTimer = 0;
   powerUpTimer = 0;
   document.getElementById("invincibleNotice").classList.add("hidden");
+  document.getElementById("jumpingNotice").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.add("hidden");
   lastTime = performance.now();
   gameLoop();
@@ -239,12 +252,6 @@ function restartGame() {
 
 document.addEventListener("keydown", (e) => {
   if ((e.code === "Space" || e.code === "ArrowUp") && !isGameOver) {
-    if (canJump) {
-      dino.isJumping = true;
-      dino.jumpTimer = 0;
-      dino.velocityY = -10;
-      canJump = false;
-    }
     jumpPressed = true;
   }
   if (isGameOver && e.code === "Space") restartGame();
@@ -257,11 +264,7 @@ document.addEventListener("keyup", (e) => {
 });
 
 document.addEventListener("touchstart", () => {
-  if (!isGameOver && canJump) {
-    dino.isJumping = true;
-    dino.jumpTimer = 0;
-    dino.velocityY = -10;
-    canJump = false;
+  if (!isGameOver) {
     jumpPressed = true;
   } else if (isGameOver) {
     restartGame();
