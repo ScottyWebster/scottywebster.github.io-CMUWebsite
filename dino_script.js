@@ -22,6 +22,9 @@ let isGameOver = false;
 let nightMode = false;
 let jumpPressed = false;
 let jumpStarted = false;
+let scoreTimer = 0;
+let isGrounded = true;
+let timesJumped = 0;
 
 let lastTime = performance.now();
 let obstacleTimer = 0;
@@ -97,35 +100,60 @@ function spawnPowerUp() {
 function update(deltaTime) {
   if (isGameOver) return;
 
-  score += Math.floor(deltaTime * 60);
+  scoreTimer += deltaTime;
+  if (scoreTimer >= 0.1) {
+    score += 1;
+    scoreTimer = 0;
+  }
+
   gameSpeed = 5 + score / 200;
 
-  if (jumpPressed && !dino.isJumping && dino.y >= 260) {
+  // Track if dino is on the ground/falling
+  if (dino.y >= 260) {
+    dino.y = 260;
+    dino.velocityY = 0;
+    isGrounded = true;
+  } else {
+    isGrounded = false;
+  }
+
+  if (jumpPressed && dino.isJumping === false && isGrounded) {
     dino.isJumping = true;
     dino.jumpDuration = 0;
     dino.velocityY = JUMP_VELOCITY;
   }
 
-  if (dino.isJumping && jumpPressed && dino.jumpDuration < MAX_JUMP_TIME) {
+  if (
+    dino.isJumping &&
+    jumpPressed &&
+    dino.jumpDuration < MAX_JUMP_TIME &&
+    timesJumped < 2
+  ) {
     dino.velocityY = JUMP_VELOCITY;
     dino.jumpDuration += deltaTime;
+    console.log("Jumping...");
   }
+
+  if (dino.velocityY > 0 && dino.y >= 260) dino.isJumping = false;
 
   dino.velocityY += dino.gravity * deltaTime;
   dino.y += dino.velocityY * deltaTime;
 
-  if (dino.y < 260) {
-    document.getElementById("jumpingNotice").classList.remove("hidden");
-  } else {
-    document.getElementById("jumpingNotice").classList.add("hidden");
-  }
-
-  if (dino.y >= 260) {
-    dino.y = 260;
-    dino.velocityY = 0;
+  if (isGrounded && !jumpPressed) {
     dino.isJumping = false;
     dino.jumpDuration = 0;
+    timesJumped = 0;
   }
+
+  if (dino.isJumping)
+    document.getElementById("jumpingNotice").classList.remove("hidden");
+  else document.getElementById("jumpingNotice").classList.add("hidden");
+  if (isGrounded)
+    document.getElementById("groundedNotice").classList.remove("hidden");
+  else document.getElementById("groundedNotice").classList.add("hidden");
+
+  // Store jump state for next frame
+  wasJumpPressedLastFrame = jumpPressed;
 
   obstacleTimer += deltaTime;
   powerUpTimer += deltaTime;
@@ -238,6 +266,7 @@ function restartGame() {
   dino.isJumping = false;
   dino.jumpDuration = 0;
   dino.isInvincible = false;
+  jumpPressed = false;
   isGameOver = false;
   obstacles = [];
   powerUps = [];
@@ -253,6 +282,7 @@ function restartGame() {
 document.addEventListener("keydown", (e) => {
   if ((e.code === "Space" || e.code === "ArrowUp") && !isGameOver) {
     jumpPressed = true;
+    timesJumped++;
   }
   if (isGameOver && e.code === "Space") restartGame();
 });
