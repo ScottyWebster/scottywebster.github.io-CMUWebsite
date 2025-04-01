@@ -229,11 +229,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const categoryCheckboxes = document.querySelectorAll(".category-filter");
 
   function renderProducts() {
-    const search = searchInput.value.toLowerCase();
-    const sortValue = sortSelect.value;
-    const selectedCategories = Array.from(categoryCheckboxes)
-      .filter((cb) => cb.checked)
-      .map((cb) => cb.value);
+    if (!gallery) {
+      console.error("Gallery element not found in the DOM.");
+      return;
+    }
+    const search = searchInput ? searchInput.value.toLowerCase() : "";
+    const sortValue = sortSelect ? sortSelect.value : "";
+    const selectedCategories = categoryCheckboxes
+      ? Array.from(categoryCheckboxes)
+          .filter((cb) => cb.checked)
+          .map((cb) => cb.value)
+      : [];
 
     let filtered = products.filter(
       (p) =>
