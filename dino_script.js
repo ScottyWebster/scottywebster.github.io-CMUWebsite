@@ -1,4 +1,4 @@
-// Dino Game with Extension Features
+// Dino Game with Extension Features — Time-Based Version
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
@@ -18,12 +18,14 @@ let score = 0;
 let obstacles = [];
 let powerUps = [];
 let gameSpeed = 5;
-let frameCount = 0;
-let lastObstacleX = 0;
-
 let isGameOver = false;
 let nightMode = false;
 let jumpPressed = false;
+let canJump = true;
+
+let lastTime = performance.now();
+let obstacleTimer = 0;
+let powerUpTimer = 0;
 
 const MAX_JUMP_TIME = 5;
 
@@ -44,18 +46,15 @@ const starImage = new Image();
 starImage.src = "https://cdn-icons-png.flaticon.com/512/1828/1828884.png";
 
 function spawnObstacle() {
-  const minDistance = 100;
-
+  const minDistance = 150;
   if (
     obstacles.length > 0 &&
     obstacles[obstacles.length - 1].x > canvas.width - minDistance
-  ) {
+  )
     return;
-  }
 
   const type = Math.random();
   let newObstacle;
-
   if (type < 0.4) {
     newObstacle = {
       x: canvas.width,
@@ -77,13 +76,11 @@ function spawnObstacle() {
       x: canvas.width,
       y: 260,
       width: 50,
-      height: 40,
+      height: 50,
       type: "rock",
     };
   }
-
   obstacles.push(newObstacle);
-  lastObstacleX = newObstacle.x;
 }
 
 function spawnPowerUp() {
@@ -96,35 +93,45 @@ function spawnPowerUp() {
   });
 }
 
-function update() {
+function update(deltaTime) {
   if (isGameOver) return;
 
-  frameCount++;
-  score += 1;
-
-  if (score % 100 === 0) gameSpeed += 0.5;
+  score += Math.floor(deltaTime * 60);
+  gameSpeed = 5 + score / 200;
 
   if (jumpPressed && dino.isJumping && dino.jumpTimer < MAX_JUMP_TIME) {
     dino.velocityY = -10;
-    dino.jumpTimer++;
+    dino.jumpTimer += deltaTime * 60;
   }
 
-  dino.velocityY += dino.gravity;
+  dino.velocityY += dino.gravity * deltaTime * 60;
   dino.y += dino.velocityY;
 
   if (dino.y >= 260) {
     dino.y = 260;
     dino.isJumping = false;
     dino.jumpTimer = 0;
+    canJump = true;
   }
 
-  const spawnRate = Math.max(20, 100 - gameSpeed * 5); // Minimum interval of 20 frames
-  if (frameCount % Math.floor(spawnRate) === 0) spawnObstacle();
+  obstacleTimer += deltaTime;
+  powerUpTimer += deltaTime;
 
-  if (frameCount % 500 === 0) spawnPowerUp();
+  const obstacleInterval = Math.max(0.3, 1.5 - gameSpeed * 0.05);
+  const powerUpInterval = 10;
+
+  if (obstacleTimer >= obstacleInterval) {
+    spawnObstacle();
+    obstacleTimer = 0;
+  }
+
+  if (powerUpTimer >= powerUpInterval) {
+    spawnPowerUp();
+    powerUpTimer = 0;
+  }
 
   obstacles.forEach((obs, index) => {
-    obs.x -= gameSpeed;
+    obs.x -= gameSpeed * deltaTime * 60;
     if (obs.x + obs.width < 0) obstacles.splice(index, 1);
 
     if (
@@ -139,7 +146,7 @@ function update() {
   });
 
   powerUps.forEach((pwr, index) => {
-    pwr.x -= gameSpeed;
+    pwr.x -= gameSpeed * deltaTime * 60;
     if (pwr.x + pwr.width < 0) powerUps.splice(index, 1);
 
     if (
@@ -166,11 +173,16 @@ function update() {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-
   ctx.fillStyle = nightMode ? "#111" : "#fff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.drawImage(dinoImage, dino.x, dino.y, dino.width, dino.height);
+
+  if (dino.isInvincible) {
+    ctx.strokeStyle = "gold";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(dino.x, dino.y, dino.width, dino.height);
+  }
 
   obstacles.forEach((obs) => {
     if (obs.type === "bird")
@@ -190,8 +202,11 @@ function draw() {
   });
 }
 
-function gameLoop() {
-  update();
+function gameLoop(currentTime = performance.now()) {
+  const deltaTime = (currentTime - lastTime) / 1000;
+  lastTime = currentTime;
+
+  update(deltaTime);
   draw();
   if (!isGameOver) requestAnimationFrame(gameLoop);
 }
@@ -205,35 +220,34 @@ function triggerGameOver() {
 function restartGame() {
   score = 0;
   gameSpeed = 5;
-  frameCount = 0;
   dino.y = 260;
   dino.velocityY = 0;
   dino.isJumping = false;
   dino.jumpTimer = 0;
   dino.isInvincible = false;
+  canJump = true;
   isGameOver = false;
   obstacles = [];
   powerUps = [];
+  obstacleTimer = 0;
+  powerUpTimer = 0;
+  document.getElementById("invincibleNotice").classList.add("hidden");
   document.getElementById("gameOverScreen").classList.add("hidden");
+  lastTime = performance.now();
   gameLoop();
 }
 
-function startJump() {
-  if (!dino.isJumping) {
-    dino.isJumping = true;
-    dino.jumpTimer = 0;
-    dino.velocityY = -10;
-  }
-}
-
 document.addEventListener("keydown", (e) => {
-  if (e.code === "Space" || e.code === "ArrowUp") {
-    if (!isGameOver) {
-      if (!jumpPressed) startJump();
-      jumpPressed = true;
+  if ((e.code === "Space" || e.code === "ArrowUp") && !isGameOver) {
+    if (canJump) {
+      dino.isJumping = true;
+      dino.jumpTimer = 0;
+      dino.velocityY = -10;
+      canJump = false;
     }
-    if (isGameOver && e.code === "Space") restartGame();
+    jumpPressed = true;
   }
+  if (isGameOver && e.code === "Space") restartGame();
 });
 
 document.addEventListener("keyup", (e) => {
@@ -243,10 +257,15 @@ document.addEventListener("keyup", (e) => {
 });
 
 document.addEventListener("touchstart", () => {
-  if (!isGameOver) {
-    startJump();
+  if (!isGameOver && canJump) {
+    dino.isJumping = true;
+    dino.jumpTimer = 0;
+    dino.velocityY = -10;
+    canJump = false;
     jumpPressed = true;
-  } else restartGame();
+  } else if (isGameOver) {
+    restartGame();
+  }
 });
 
 document.addEventListener("touchend", () => {

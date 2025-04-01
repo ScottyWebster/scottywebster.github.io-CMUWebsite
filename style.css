@@ -451,18 +451,12 @@ body.dark-mode .highlight {
 }
 
 #invincibleNotice {
-  position: absolute;
-  top: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 28px;
+  font-size: 24px;
   color: gold;
   font-weight: bold;
   animation: pulse 1s infinite;
   text-shadow: 0 0 10px gold;
-  z-index: 10;
 }
-
 
 @keyframes pulse {
   0%   { transform: scale(1); }
