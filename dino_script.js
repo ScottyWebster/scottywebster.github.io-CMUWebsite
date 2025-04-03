@@ -30,7 +30,7 @@ let lastTime = performance.now();
 let obstacleTimer = 0;
 let powerUpTimer = 0;
 
-const MAX_JUMP_TIME = 0.3; // seconds
+const MAX_JUMP_TIME = 0.15; // seconds
 const JUMP_VELOCITY = -400; // px/s
 
 const dinoImage = new Image();
