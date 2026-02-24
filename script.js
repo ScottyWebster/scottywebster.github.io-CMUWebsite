@@ -120,10 +120,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".close").addEventListener("click", closeModal);
 
     const prevBtn = document.querySelector(
-      ".carousel-controls button:first-child"
+      ".carousel-controls button:first-child",
     );
     const nextBtn = document.querySelector(
-      ".carousel-controls button:last-child"
+      ".carousel-controls button:last-child",
     );
 
     if (prevBtn && nextBtn) {
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleBtn.textContent = darkModeEnabled ? "🌙" : "☀️";
       localStorage.setItem(
         "darkMode",
-        darkModeEnabled ? "enabled" : "disabled"
+        darkModeEnabled ? "enabled" : "disabled",
       );
     });
   }
@@ -165,7 +165,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   //Shop stuff
-
   const products = [
     {
       name: "Smartphone",
@@ -191,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
       price: 19,
       category: "Clothing",
     },
-    { 
+    {
       name: "Headphones",
       image: "images/headphones.jpg",
       price: 199,
@@ -230,7 +229,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderProducts() {
     if (!gallery) {
-      console.error("Gallery element not found in the DOM.");
       return;
     }
     const search = searchInput ? searchInput.value.toLowerCase() : "";
@@ -244,14 +242,12 @@ document.addEventListener("DOMContentLoaded", () => {
     let filtered = products.filter(
       (p) =>
         p.name.toLowerCase().includes(search) &&
-        selectedCategories.includes(p.category)
+        selectedCategories.includes(p.category),
     );
 
     // Sort logic
-    if (sortValue === "price-asc")
-      filtered.sort((a, b) => a.price - b.price);
-    if (sortValue === "price-desc")
-      filtered.sort((a, b) => b.price - a.price);
+    if (sortValue === "price-asc") filtered.sort((a, b) => a.price - b.price);
+    if (sortValue === "price-desc") filtered.sort((a, b) => b.price - a.price);
     if (sortValue === "name-asc")
       filtered.sort((a, b) => a.name.localeCompare(b.name));
     if (sortValue === "name-desc")
@@ -265,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const regex = new RegExp(`(${search})`, "gi");
       const highlightedName = p.name.replace(
         regex,
-        '<span class="highlight">$1</span>'
+        '<span class="highlight">$1</span>',
       );
 
       card.innerHTML = `
@@ -281,16 +277,123 @@ document.addEventListener("DOMContentLoaded", () => {
   if (searchInput) {
     searchInput.addEventListener("input", renderProducts);
   }
-  
+
   if (sortSelect) {
     sortSelect.addEventListener("change", renderProducts);
   }
-  
+
   if (categoryCheckboxes.length > 0) {
     categoryCheckboxes.forEach((cb) =>
-      cb.addEventListener("change", renderProducts)
+      cb.addEventListener("change", renderProducts),
     );
   }
 
   renderProducts();
+
+  // --- Global Chatbot Implementation ---
+
+  const chatbotHTML = `
+    <div id="chatbot-widget" class="chatbot-hidden">
+      <div id="chatbot-header">
+        <h3>AI Assistant</h3>
+        <span id="chatbot-toggle-icon">💬</span>
+      </div>
+      <div id="chatbot-body">
+        <div id="chat-messages"></div>
+        <form id="chat-form">
+          <input type="text" id="chat-input" placeholder="Type a message..." required autocomplete="off" />
+          <button type="submit">Send</button>
+          <button type="button" id="chat-clear">Clear</button>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML("beforeend", chatbotHTML);
+
+  let chatHistory = [
+    { role: "system", content: "You are a helpful assistant." },
+  ];
+
+  const widget = document.getElementById("chatbot-widget");
+  const header = document.getElementById("chatbot-header");
+  const messagesContainer = document.getElementById("chat-messages");
+  const chatForm = document.getElementById("chat-form");
+  const chatInput = document.getElementById("chat-input");
+  const clearBtn = document.getElementById("chat-clear");
+
+  header.addEventListener("click", () => {
+    widget.classList.toggle("chatbot-hidden");
+  });
+
+  function appendMessage(role, content) {
+    if (role === "system") return;
+    const div = document.createElement("div");
+    div.className = `message ${role}`;
+    div.textContent = content;
+    messagesContainer.appendChild(div);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    chatInput.value = "";
+
+    chatHistory.push({ role: "user", content: text });
+    appendMessage("user", text);
+
+    try {
+      // Notice: Only using a relative path now because the frontend and backend share a server
+      const response = await fetch("/api/generate?endpoint=chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        const eventSource = new EventSource("/api/generate?endpoint=stream");
+
+        eventSource.onmessage = function (event) {
+          const parsedData = JSON.parse(event.data);
+          const lastIndex = chatHistory.length - 1;
+
+          if (
+            chatHistory.length > 0 &&
+            chatHistory[lastIndex].role === "assistant"
+          ) {
+            chatHistory[lastIndex].content += parsedData;
+            const messageNodes = messagesContainer.querySelectorAll(".message");
+            if (messageNodes.length > 0) {
+              messageNodes[messageNodes.length - 1].textContent =
+                chatHistory[lastIndex].content;
+            }
+          } else {
+            chatHistory.push({ role: "assistant", content: parsedData });
+            appendMessage("assistant", parsedData);
+          }
+          messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        eventSource.onerror = function () {
+          eventSource.close();
+        };
+      }
+    } catch (error) {
+      console.error("Failed to send message:", error);
+    }
+  });
+
+  clearBtn.addEventListener("click", async () => {
+    chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
+    messagesContainer.innerHTML = "";
+    try {
+      await fetch("/api/generate?endpoint=reset", { method: "POST" });
+    } catch (error) {
+      console.error("Failed to clear chat:", error);
+    }
+  });
 });
