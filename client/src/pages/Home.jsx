@@ -8,7 +8,11 @@ export default function Home() {
         I'm working on building up my experience and skills, but have already
         progressed far.
       </p>
-
+      <p>
+        {" "}
+        I am going to school at Kean University, pursuing a degree in Computer
+        Science with a specialization in Data Science.
+      </p>
       <Link to="/projects">
         <button>View My Projects</button>
       </Link>
