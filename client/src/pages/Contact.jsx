@@ -91,6 +91,9 @@ export default function Contact() {
           </p>
         )}
       </form>
+      <h3>
+        <p>webster.j.scott@gmail.com</p>
+      </h3>
     </section>
   );
 }
