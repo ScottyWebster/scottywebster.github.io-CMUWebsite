@@ -47,11 +47,11 @@ export default function Projects() {
         </div>
 
         <div className="project-card">
-          <h3>Blank</h3>
+          <h3>Placeholder</h3>
           <button
             className="view-details-btn"
             onClick={() =>
-              openModal("Blank", "Placeholder project", [
+              openModal("Placeholder", "Placeholder project", [
                 "/images/img4.jpg",
                 "/images/img5.jpg",
               ])
@@ -79,9 +79,9 @@ export default function Projects() {
           <div className="timeline-item">
             <div className="timeline-marker"></div>
             <div className="timeline-content">
-              <h3>Blank</h3>
-              <span className="duration">May 2023 - Jun 2023</span>
-              <p>Placeholder for future project.</p>
+              <h3>Future projects</h3>
+              <span className="duration">Present - Future</span>
+              <p>Placeholder for a future project.</p>
             </div>
           </div>
         </div>
