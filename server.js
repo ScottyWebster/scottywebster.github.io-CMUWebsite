@@ -14,14 +14,12 @@ const port = process.env.PORT || 10000;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Middleware to parse JSON and serve your HTML/CSS/JS files
+// Middleware to parse JSON
 app.use(express.json());
-// 1. Point to the dist folder inside the client directory
+
+// 1. Serve static files from the dist folder
 app.use(express.static(path.join(__dirname, "client", "dist")));
-// 2. Update the catch-all to point to the correct index.html location
-app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
-});
+
 // Global chat history for the session
 let chatHistory = [
   {
@@ -31,7 +29,7 @@ let chatHistory = [
   },
 ];
 
-// POST route for sending messages and resetting history
+// 2. API Routes (MUST be defined before the wildcard)
 app.post("/api/generate", (req, res) => {
   const endpoint = req.query.endpoint;
 
@@ -52,9 +50,10 @@ app.post("/api/generate", (req, res) => {
   }
 });
 
-// GET route for the Server-Sent Events (SSE) stream
+// SSE stream for the chat
 app.get("/api/generate", async (req, res) => {
   if (req.query.endpoint === "stream") {
+    // These headers ensure the browser treats this as a stream, not HTML
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
@@ -81,6 +80,12 @@ app.get("/api/generate", async (req, res) => {
   } else {
     res.status(404).json({ error: "Endpoint not found" });
   }
+});
+
+// 3. Catch-all Route (MUST be last)
+// This handles client-side routing and serves the index.html for unknown routes
+app.get("/{*splat}", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 app.listen(port, () => {
