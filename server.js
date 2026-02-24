@@ -19,7 +19,7 @@ app.use(express.json());
 // 1. Point to the dist folder inside the client directory
 app.use(express.static(path.join(__dirname, "client", "dist")));
 // 2. Update the catch-all to point to the correct index.html location
-app.get("/*splat", (req, res) => {
+app.get("/{*splat}", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 // Global chat history for the session
