@@ -1,11 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap");
 
+/* --- DEFAULT: DARK MODE (SITH/DEEP SPACE THEME) --- */
 body {
-  font-family: "Orbitron", Arial, sans-serif; /* Sci-fi font */
-  background-color: #050505; /* Deep space black */
+  font-family: "Orbitron", Arial, sans-serif;
+  background-color: #050505;
   color: #e0e0e0;
   margin: 0;
   padding: 0;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 /* --- Navigation --- */
@@ -15,8 +19,9 @@ nav {
   position: sticky;
   top: 0;
   z-index: 1000;
-  border-bottom: 2px solid #ffe81f; /* Star Wars Yellow */
+  border-bottom: 2px solid #ffe81f;
   box-shadow: 0 4px 10px rgba(255, 232, 31, 0.2);
+  transition: all 0.3s ease;
 }
 
 nav ul {
@@ -65,6 +70,7 @@ section {
   border: 1px solid #333;
   border-radius: 10px;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
 .modal {
@@ -93,6 +99,7 @@ section {
   width: 80%;
   max-width: 600px;
   box-shadow: 0 0 20px rgba(255, 232, 31, 0.4);
+  transition: all 0.3s ease;
 }
 
 .close {
@@ -100,7 +107,7 @@ section {
   top: 10px;
   right: 20px;
   font-size: 24px;
-  color: #ff3333; /* Sith red */
+  color: #ff3333;
   cursor: pointer;
 }
 
@@ -109,7 +116,7 @@ button,
 .tab-button {
   padding: 10px 20px;
   background-color: transparent;
-  color: #2ecc71; /* Jedi Green */
+  color: #2ecc71;
   border: 2px solid #2ecc71;
   border-radius: 6vw;
   cursor: pointer;
@@ -133,18 +140,18 @@ button:hover,
 }
 
 #darkModeToggle {
-  color: #3498db; /* Blue lightsaber for toggle */
-  border-color: #3498db;
+  color: #ffe81f;
+  border-color: #ffe81f;
   box-shadow:
-    0 0 8px #3498db,
-    inset 0 0 8px #3498db;
+    0 0 8px #ffe81f,
+    inset 0 0 8px #ffe81f;
 }
 
 #darkModeToggle:hover {
-  background-color: #3498db;
+  background-color: #ffe81f;
   box-shadow:
-    0 0 20px #3498db,
-    inset 0 0 10px #3498db;
+    0 0 20px #ffe81f,
+    inset 0 0 10px #ffe81f;
 }
 
 /* --- Timeline --- */
@@ -154,8 +161,9 @@ button:hover,
   padding: 20px 0;
   width: 90%;
   max-width: 700px;
-  border-left: 3px solid #ff3333; /* Sith Red timeline */
+  border-left: 3px solid #ff3333;
   box-shadow: -2px 0 10px rgba(255, 51, 51, 0.5);
+  transition: all 0.3s ease;
 }
 
 .timeline-marker {
@@ -168,10 +176,12 @@ button:hover,
   position: absolute;
   left: -13px;
   top: 0;
+  transition: all 0.3s ease;
 }
 
 .timeline-content .duration {
   color: #ffe81f;
+  transition: color 0.3s ease;
 }
 
 /* --- Carousel --- */
@@ -188,7 +198,6 @@ button:hover,
   border: 1px solid #444;
 }
 
-/* Fix for Carousel Arrows */
 .prev,
 .next {
   position: absolute;
@@ -263,6 +272,7 @@ textarea {
   font-family: Arial, sans-serif;
   width: 50%;
   max-width: 350px;
+  transition: all 0.3s ease;
 }
 
 input[type="text"]:focus,
@@ -292,11 +302,12 @@ textarea:focus {
   text-align: center;
   padding: 10px;
   color: #fff;
+  transition: all 0.3s ease;
 }
 
 .product-card img {
   max-width: 100%;
-  height: auto; /* This forces the images to scale correctly! */
+  height: auto;
   border-radius: 5px;
 }
 
@@ -336,7 +347,7 @@ textarea:focus {
 }
 
 .bar {
-  background-color: #3498db; /* Blue progress */
+  background-color: #3498db;
   height: 20px;
   width: var(--level, 0%);
   color: #fff;
@@ -358,21 +369,23 @@ textarea:focus {
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 15px rgba(255, 232, 31, 0.3);
+  transition: all 0.3s ease;
 }
 
 #dino {
   width: 50px;
   height: 50px;
-  background-color: #fff; /* Represents a ship */
+  background-color: #fff;
   position: absolute;
   bottom: 0;
   box-shadow: 0 0 10px #3498db;
+  transition: background-color 0.3s ease;
 }
 
 #cactus {
   width: 20px;
   height: 40px;
-  background-color: #ff3333; /* Enemy laser/obstacle */
+  background-color: #ff3333;
   position: absolute;
   bottom: 0;
   right: 0;
@@ -386,7 +399,7 @@ textarea:focus {
   color: #ffe81f;
 }
 
-/* Animations */
+/* Animations & Helpers */
 @keyframes pulse {
   0% {
     transform: scale(1);
@@ -426,7 +439,6 @@ section {
 section.fade-out {
   animation: fadeout 1s;
 }
-
 .error {
   color: red;
   font-size: 0.9em;
@@ -438,4 +450,118 @@ section.fade-out {
 }
 .hidden {
   display: none;
+}
+
+/* ========================================================
+   LIGHT MODE OVERRIDES (GALACTIC REPUBLIC / JEDI THEME) 
+   These apply when the toggle disables `.dark-mode`
+   ======================================================== */
+body:not(.dark-mode) {
+  background-color: #f5f6fa;
+  color: #111;
+}
+
+body:not(.dark-mode) nav {
+  background-color: #e1e2e6;
+  border-bottom: 2px solid #3498db;
+  box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
+}
+
+body:not(.dark-mode) nav a {
+  color: #3498db;
+}
+
+body:not(.dark-mode) nav a:hover {
+  background-color: #3498db;
+  color: #fff;
+  box-shadow: 0 0 15px #3498db;
+}
+
+body:not(.dark-mode) .project-card,
+body:not(.dark-mode) .timeline-content,
+body:not(.dark-mode) .product-card {
+  background: #fff;
+  color: #111;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+body:not(.dark-mode) .modal-content {
+  background: #fff;
+  border: 2px solid #3498db;
+  color: #111;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+}
+
+body:not(.dark-mode) button,
+body:not(.dark-mode) .tab-button {
+  color: #3498db;
+  border-color: #3498db;
+  box-shadow:
+    0 0 8px #3498db,
+    inset 0 0 8px #3498db;
+}
+
+body:not(.dark-mode) button:hover,
+body:not(.dark-mode) .tab-button:hover,
+body:not(.dark-mode) .tab-button.active {
+  background-color: #3498db;
+  color: #fff;
+  box-shadow:
+    0 0 20px #3498db,
+    inset 0 0 10px #3498db;
+}
+
+/* Keep the clear button red in light mode */
+body:not(.dark-mode) .close {
+  color: #ff3333;
+}
+
+body:not(.dark-mode) input[type="text"],
+body:not(.dark-mode) select,
+body:not(.dark-mode) textarea {
+  background-color: #fff;
+  color: #111;
+  border: 1px solid #ccc;
+}
+
+body:not(.dark-mode) .timeline {
+  border-left: 3px solid #3498db;
+  box-shadow: -2px 0 10px rgba(52, 152, 219, 0.5);
+}
+
+body:not(.dark-mode) .timeline-marker {
+  background-color: #fff;
+  border: 3px solid #3498db;
+  box-shadow: 0 0 10px #3498db;
+}
+
+body:not(.dark-mode) .timeline-content .duration {
+  color: #3498db;
+}
+
+body:not(.dark-mode) #game {
+  background-color: #fff;
+  border-color: #3498db;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+}
+
+body:not(.dark-mode) #dino {
+  background-color: #111;
+}
+
+body:not(.dark-mode) .carousel .prev,
+body:not(.dark-mode) .carousel .next {
+  color: #3498db !important;
+}
+
+body:not(.dark-mode) .carousel .prev:hover,
+body:not(.dark-mode) .carousel .next:hover {
+  color: #111 !important;
+  text-shadow: 0 0 10px #3498db;
+}
+
+body:not(.dark-mode) .dot.active {
+  background-color: #3498db;
+  box-shadow: 0 0 8px #3498db;
 }

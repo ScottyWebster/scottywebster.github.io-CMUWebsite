@@ -5,7 +5,7 @@
   right: 20px;
   width: 320px;
   background: rgba(10, 10, 10, 0.95);
-  border: 1px solid #3498db; /* Holo Blue border */
+  border: 1px solid #3498db;
   border-radius: 10px;
   box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
   z-index: 2000;
@@ -15,7 +15,7 @@
   font-family: "Orbitron", Arial, sans-serif;
 }
 
-/* When closed, hide the body and shrink the width to look like a tab */
+/* When closed, hide the body and shrink the width */
 #chatbot-widget.chatbot-hidden {
   width: 200px;
 }
@@ -39,6 +39,7 @@
   text-transform: uppercase;
   letter-spacing: 1px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 #chatbot-header:hover {
@@ -78,6 +79,7 @@
   max-width: 85%;
   word-wrap: break-word;
   font-size: 14px;
+  transition: all 0.3s ease;
 }
 
 /* User (Jedi/Rebel - Green) */
@@ -107,15 +109,16 @@
   border-top: 1px solid #3498db;
   background: #111;
   margin: 0 !important;
-  gap: 6px !important; /* Slightly tighter gap */
+  gap: 6px !important;
   border-radius: 0 0 10px 10px;
   width: 100% !important;
-  box-sizing: border-box !important; /* Critical: keeps padding inside the 320px width */
+  box-sizing: border-box !important;
+  transition: all 0.3s ease;
 }
 
 #chat-input {
   flex: 1 1 auto !important;
-  min-width: 0 !important; /* Critical: allows input to shrink so buttons fit */
+  min-width: 0 !important;
   padding: 8px !important;
   background-color: #000 !important;
   color: #fff !important;
@@ -123,6 +126,7 @@
   border-radius: 6px !important;
   outline: none;
   font-family: Arial, sans-serif;
+  transition: all 0.3s ease;
 }
 
 #chat-input:focus {
@@ -132,9 +136,9 @@
 
 /* --- Button Overrides --- */
 #chat-form button {
-  flex: 0 0 auto !important; /* Prevents buttons from being squished */
-  padding: 8px 10px !important; /* Slightly tighter padding */
-  font-size: 12px !important; /* Reduced font size to fit neatly */
+  flex: 0 0 auto !important;
+  padding: 8px 10px !important;
+  font-size: 12px !important;
   border-radius: 6px !important;
   background: transparent !important;
   color: #3498db !important;
@@ -160,4 +164,48 @@
   background: #ff3333 !important;
   color: #000 !important;
   box-shadow: 0 0 10px #ff3333 !important;
+}
+
+/* ========================================================
+   LIGHT MODE OVERRIDES (GALACTIC REPUBLIC / JEDI THEME) 
+   ======================================================== */
+body:not(.dark-mode) #chatbot-widget {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #3498db;
+  box-shadow: 0 0 20px rgba(52, 152, 219, 0.4);
+}
+
+body:not(.dark-mode) #chatbot-header {
+  background: #e1e2e6;
+  color: #3498db;
+  border-bottom-color: #3498db;
+}
+
+body:not(.dark-mode) #chatbot-header:hover {
+  background: #d1d2d6;
+}
+
+body:not(.dark-mode) #chat-form {
+  background: #e1e2e6;
+  border-top-color: #3498db;
+}
+
+body:not(.dark-mode) #chat-input {
+  background-color: #fff !important;
+  color: #111 !important;
+  border-color: #ccc !important;
+}
+
+body:not(.dark-mode) .message.assistant {
+  background-color: #f4f4f9;
+  color: #111;
+  border-color: #3498db;
+  box-shadow: inset 0 0 8px rgba(52, 152, 219, 0.3);
+}
+
+body:not(.dark-mode) .message.user {
+  color: #000;
+  border-color: #2ecc71;
+  background-color: #daf8e3;
+  box-shadow: none;
 }
