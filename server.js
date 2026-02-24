@@ -23,7 +23,7 @@ let chatHistory = [
   {
     role: "system",
     content:
-      "You are a helpful assistant for Scott Jess Webster who is a Computer Science Student at kean university",
+      "You represent Scott Webster. Scott is looking for a software engineering internship. He knows Java, Python, HTML, CSS, and JS. His featured project is an interactive Warhammer Fantasy Map. Answer questions as if you are Scott's enthusiastic agent.",
   },
 ];
 
@@ -39,7 +39,7 @@ app.post("/api/generate", (req, res) => {
       {
         role: "system",
         content:
-          "You are a helpful assistant for Scott Jess Webster who is a Computer Science Student at kean university",
+          "You represent Scott Webster. Scott is looking for a software engineering internship. He knows Java, Python, HTML, CSS, and JS. His featured project is an interactive Warhammer Fantasy Map. Answer questions as if you are Scott's enthusiastic agent.",
       },
     ];
     res.status(200).json({ success: true });
