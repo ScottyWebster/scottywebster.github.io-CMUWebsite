@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -18,9 +18,8 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 app.use(express.json());
 // 1. Point to the dist folder inside the client directory
 app.use(express.static(path.join(__dirname, "client", "dist")));
-
 // 2. Update the catch-all to point to the correct index.html location
-app.get("*", (req, res) => {
+app.get("(.*)", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 // Global chat history for the session
